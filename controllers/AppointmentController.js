@@ -104,19 +104,19 @@ const updateAppointment = async (req, res) => {
                 const month = new Date().getMonth() + 1;
                 const type = "servico";
 
-                let monthlyReport = await MonthlyReport.findOne({ barbershop: barbershopId, year, month });
-                console.log(monthlyReport);
-                if (!monthlyReport) {
-                    monthlyReport = new MonthlyReport({
-                        barbershop: barbershopId,
-                        year,
-                        month,
-                        totalBarbershop: 0,
-                        totalService: 0,
-                        totalProduct: 0
-                    });
-                    await monthlyReport.save();
-                }
+                // let monthlyReport = await MonthlyReport.findOne({ barbershop: barbershopId, year, month });
+                // console.log(monthlyReport);
+                // if (!monthlyReport) {
+                //     monthlyReport = new MonthlyReport({
+                //         barbershop: barbershopId,
+                //         year,
+                //         month,
+                //         totalBarbershop: 0,
+                //         totalService: 0,
+                //         totalProduct: 0
+                //     });
+                //     await monthlyReport.save();
+                // }
 
                 await MonthlyReport.findOneAndUpdate(
                     { barbershop: barbershopId, year, month },
@@ -176,10 +176,26 @@ const getAppointmentsByDate = async (req, res) => {
     }
 };
 
+const getallAppointments = async (req, res) => {
+    const { barbershopId } = req.params;
+
+    try {
+        const appointments = await Appointment.find({
+            barbershop: barbershopId
+        }).populate('barber').populate('service').populate('barbershop');
+
+        res.status(200).json(appointments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao recuperar os agendamentos' });
+    }
+};
+
 
 module.exports = {
     createAppointment,
     deleteAppointment,
     updateAppointment,
-    getAppointmentsByDate
+    getAppointmentsByDate,
+    getallAppointments
 }

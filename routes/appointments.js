@@ -8,5 +8,6 @@ router.post('/create_appointment', verifyToken, authorizeManager, AppointmentCon
 router.delete('/delete_appointment/:id', verifyToken, authorizeManager, AppointmentController.deleteAppointment);
 router.put('/update_appointment/:id', verifyToken, authorizeManager, AppointmentController.updateAppointment);
 router.get('/get_appointement/:barbershopId', verifyToken, authorizeManager, AppointmentController.getAppointmentsByDate);
+router.get('/get_all_appointements/:barbershopId', verifyToken, authorizeManager, AppointmentController.getallAppointments);
 
 module.exports = router;
