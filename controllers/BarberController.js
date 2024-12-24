@@ -74,7 +74,8 @@ const deleteBarber = async (req, res) => {
 // Get all barber
 const getAllBarbers = async (req, res) => {
     try {
-        const barbers = await Barber.find().populate('barbershop', 'name'); // Popula a barbearia associada
+        const { barbershopId } = req.params;
+        const barbers = await Barber.find({ barbershop: barbershopId }).populate('barbershop', 'name'); // Popula a barbearia associada
         res.status(200).json(barbers);
     } catch (error) {
         console.error(error);

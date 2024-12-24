@@ -6,7 +6,7 @@ const UserSchema = new Schema({
     barbershop: {
         type: Schema.Types.ObjectId,
         ref: 'Barbershop',
-        required: function() {
+        required: function () {
             return this.role !== 'admin';
         }
     },

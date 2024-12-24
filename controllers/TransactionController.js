@@ -45,7 +45,8 @@ const createTransaction = async (req, res) => {
             barbershop,
             date,
             quantity,
-            amount: quantity * existingProduct.price
+            amount: quantity * existingProduct.price,
+            paymentStatus: ''
         });
         await newTransaction.save();
 
@@ -107,7 +108,30 @@ const deleteTransaction = async (req, res) => {
     }
 };
 
+const updateTransaction = async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    try {
+        const updatedTransaction = await Transaction.findOneAndUpdate(
+            { appointmentId: id }, // Filtro pelo ID do agendamento
+            { status }, // Atualiza o status
+            { new: true } // Retorna o documento atualizado
+        );
+
+        if (!updatedTransaction) {
+            return res.status(404).json({ message: 'Transação não encontrada.' });
+        }
+
+        res.status(200).json(updatedTransaction);
+    } catch (error) {
+        console.error('Erro ao atualizar transação:', error);
+        res.status(500).json({ message: 'Erro ao atualizar transação.', error });
+    }
+}
+
 module.exports = {
     createTransaction,
-    deleteTransaction
+    deleteTransaction,
+    updateTransaction
 };

@@ -23,7 +23,9 @@ const getFinancialReport = async (req, res) => {
             date: {
                 $gte: fromDate,
                 $lt: toDate
-            }
+            },
+            paymentStatus: 'Pago',
+
         })
             .populate({
                 path: 'appointment',
@@ -184,7 +186,8 @@ const getDailyData = async (req, res) => {
         date: {
             $gte: fromDate,
             $lt: toDate
-        }
+        },
+        paymentStatus: 'Pago',
     })
         .populate({
             path: 'appointment',

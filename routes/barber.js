@@ -7,5 +7,6 @@ const BarberController = require('../controllers/BarberController');
 router.post('/create_barber', verifyToken, authorizeManager, BarberController.createBarber);
 router.delete('/delete_barber/:id', verifyToken, authorizeManager, BarberController.deleteBarber);
 router.put('/update_barber/:id', verifyToken, authorizeManager, BarberController.updateBarber);
+router.get('/get_all_barbers/:barbershopId', verifyToken, authorizeManager, BarberController.getAllBarbers);
 
 module.exports = router;

@@ -47,6 +47,14 @@ const deleteAppointment = async (req, res) => {
     const { id } = req.params;
 
     try {
+        const deletedTransaction = await Transaction.find({ appointment: id });
+
+        if (deletedTransaction.length > 0) {
+            // Excluir todas as transações associadas ao agendamento
+            await Transaction.deleteMany({ appointment: id });
+            console.log('Transações excluídas com sucesso');
+        }
+
         // Search and delete the appointment by ID
         const deletedAppointment = await Appointment.findByIdAndDelete(id);
 
@@ -63,7 +71,7 @@ const deleteAppointment = async (req, res) => {
 
 const updateAppointment = async (req, res) => {
     const { id } = req.params;
-    const { barbershopId, barber, services, client_name, barbershop, date, hour, status } = req.body;
+    const { barbershopId, barber, services, client_name, barbershop, date, hour, status, paymentStatus } = req.body;
 
     try {
         // Search the appointment by ID
@@ -80,6 +88,7 @@ const updateAppointment = async (req, res) => {
         if (barbershop) appointment.barbershop = barbershop;
         if (date) appointment.date = date;
         if (hour) appointment.hour = hour;
+        if (paymentStatus) appointment.paymentStatus = paymentStatus;
 
         // If field 'status' was updated
         if (status) {
@@ -95,6 +104,7 @@ const updateAppointment = async (req, res) => {
                     barber: appointment.barber,
                     barbershop: appointment.barbershop,
                     amount: totalPrice,
+                    paymentStatus: paymentStatus,
                     date: appointment.date
                 });
 

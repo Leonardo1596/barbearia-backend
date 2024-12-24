@@ -64,8 +64,21 @@ const updateService = async (req, res) => {
     }
 };
 
+const getServices = async (req, res) => {
+    try {
+        const { barbershopId } = req.params;
+
+        const services = await Service.find({ barbershop: barbershopId });
+        res.status(200).json(services);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao obter os serviços' });
+    }
+};
+
 module.exports = {
     createService,
     deleteService,
-    updateService
+    updateService,
+    getServices
 };

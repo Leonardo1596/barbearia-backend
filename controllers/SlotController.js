@@ -8,7 +8,6 @@ const getAllAvailableSlots = async (req, res) => {
     res.status(200).json(retrievedAvailableSlots);
 };
 
-
 module.exports = {
     getAllAvailableSlots
 };
