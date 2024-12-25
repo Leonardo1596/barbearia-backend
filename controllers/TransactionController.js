@@ -6,7 +6,7 @@ const MonthlyReport = require('../models/MonthlyReport');
 const createTransaction = async (req, res) => {
     try {
         const { type, description, product, barber, barbershop, quantity, date, amount } = req.body;
-
+        
         if (!type || !['produto', 'despesa'].includes(type)) {
             return res.status(400).json({ error: 'Tipo de transação inválida' });
         }
