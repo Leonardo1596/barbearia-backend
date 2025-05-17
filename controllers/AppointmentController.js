@@ -9,7 +9,7 @@ const { availableSlots } = require('../services/availableSlots');
 
 const createAppointment = async (req, res) => {
     try {
-        const { barber, services, client_name, barbershop, date, hour, status } = req.body;
+        const { barber, services, client_name, barbershop, date, hour } = req.body;
 
         const existingBarbershop = await Barbershop.findById(barbershop);
         if (!existingBarbershop) {
@@ -34,7 +34,7 @@ const createAppointment = async (req, res) => {
             totalDuration += service.duration;  // Soma as durações dos serviços
         });
 
-        const newAppointment = new Appointment({ barber, service: services, client_name, barbershop, date, hour, duration: totalDuration, status });
+        const newAppointment = new Appointment({ barber, service: services, client_name, barbershop, date, hour, duration: totalDuration });
         await newAppointment.save();
         res.status(201).json(newAppointment);
     } catch (error) {
