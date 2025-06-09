@@ -2,6 +2,7 @@ const User = require('../models/UserSchema');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Barbershop = require('../models/BarbershopSchema');
+const Barber = require('../models/BarberSchema');
 
 const register = async (req, res, next) => {
     try {
@@ -81,10 +82,13 @@ const login = (req, res, next) => {
                             expiresIn: '86400s'
                         });
 
+                        const barber = await Barber.find();
+
                         let userInfo = {
                             _id: user._id,
                             name: user.name,
                             barbershop: user.barbershop,
+                            barber: barber,
                             role: user.role,
                             email: user.email,
                         };

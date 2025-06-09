@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const Appointment = require('../models/AppointmentSchema');
 const Transaction = require('../models/Transaction');
 const Barbershop = require('../models/BarbershopSchema');
@@ -201,11 +202,59 @@ const getallAppointments = async (req, res) => {
     }
 };
 
+const getfilteredAppointments = async (req, res) => {
+    const { barbershopId } = req.params;
+    const { barber, client_name, startDate, endDate, status } = req.query;
+
+    try {
+        let filters = {};
+
+        if (barber) {
+            const barbers = await Barber.find({
+                name: { $regex: barber, $options: 'i' },
+            });
+
+            const barberIds = barbers.map(b => b._id);
+            filters.barber = { $in: barberIds };
+        }
+
+        if (client_name) {
+            // Use regex for case-insensitive search by client name
+            filters.client_name = { $regex: client_name, $options: 'i' };
+        }
+
+        if (status) filters.status = _.capitalize(status);
+        console.log(filters);
+
+        if (startDate && endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+
+            if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+                filters.date = { $gte: start, $lte: end };
+            } else {
+                return res.status(400).json({ error: 'Invalid date format' });
+            }
+        }
+
+        const appointments = await Appointment.find(filters)
+            .populate('barber')
+            .populate('service')
+            .populate('barbershop');
+
+
+        res.status(200).json(appointments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao recuperar os agendamentos filtrados' });
+    }
+};
 
 module.exports = {
     createAppointment,
     deleteAppointment,
     updateAppointment,
     getAppointmentsByDate,
-    getallAppointments
+    getallAppointments,
+    getfilteredAppointments
 }

@@ -9,5 +9,6 @@ router.delete('/delete_appointment/:id', verifyToken, authorizeManager, Appointm
 router.put('/update_appointment/:id', verifyToken, authorizeManager, AppointmentController.updateAppointment);
 router.get('/get_appointment/:barbershopId', verifyToken, authorizeManager, AppointmentController.getAppointmentsByDate);
 router.get('/get_all_appointments/:barbershopId', verifyToken, authorizeManager, AppointmentController.getallAppointments);
+router.get('/appointments/filter', verifyToken, authorizeManager, AppointmentController.getfilteredAppointments);
 
 module.exports = router;
